@@ -4,16 +4,19 @@ plugins {
 
     id("kotlin-kapt")
     alias(libs.plugins.hilt)
+
 }
+
+
 
 android {
     namespace = "com.example.playerapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.playerapp"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -73,6 +76,20 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.material3)
+
+    // serialization
+    implementation (libs.gson)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    // koil
+    implementation(libs.coil.compose)
+
+
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
