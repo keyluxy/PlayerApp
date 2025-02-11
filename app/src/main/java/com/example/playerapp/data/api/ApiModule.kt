@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
 
-    private const val BASE_URL = "https://api.deezer.com/" // Исправленный BASE_URL
+    private const val BASE_URL = "https://api.deezer.com/"
 
     @Provides
     @Singleton
@@ -31,7 +31,7 @@ object ApiModule {
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create()) // Используй Gson для простоты
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 

@@ -3,6 +3,8 @@ package com.example.playerapp.presentation.navigation.custom_bottom_nav
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumnScopeInstance.weight
+import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -31,7 +33,6 @@ fun CustomBottomNavigationItem(
         contentAlignment = Alignment.Center
     ) {
         if (isSelected) {
-            // Выбранный элемент
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
                     imageVector = when (screen) {
@@ -49,7 +50,6 @@ fun CustomBottomNavigationItem(
                 )
             }
         } else {
-            // Не выбранный элемент
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
                     imageVector = when (screen) {

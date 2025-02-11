@@ -23,7 +23,7 @@ data class ChartResponse(
 
 @Serializable
 data class SearchResponse(
-    val data: List<Track> // Убедитесь, что структура данных соответствует ответу API
+    val data: List<Track>
 )
 
 @Serializable

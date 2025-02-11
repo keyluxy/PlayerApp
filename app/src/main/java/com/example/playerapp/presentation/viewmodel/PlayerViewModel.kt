@@ -14,7 +14,7 @@ class PlayerViewModel @Inject constructor() : ViewModel() {
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
     fun playTrack(url: String) {
-        stopTrack() // Останавливаем предыдущий трек
+        stopTrack()
 
         mediaPlayer = MediaPlayer().apply {
             setDataSource(url)
@@ -25,7 +25,7 @@ class PlayerViewModel @Inject constructor() : ViewModel() {
             setOnCompletionListener {
                 _isPlaying.value = false
             }
-            prepareAsync() // Асинхронная подготовка
+            prepareAsync()
         }
     }
 

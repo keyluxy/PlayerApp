@@ -30,11 +30,9 @@ class TrackRepository @Inject constructor(
             if (response.isSuccessful && response.body() != null) {
                 Result.success(response.body()!!.data)
             } else {
-                // Логирование ошибки
                 Result.failure(Exception("Failed to search tracks: ${response.message()}"))
             }
         } catch (e: Exception) {
-            // Логирование исключений
             Result.failure(e)
         }
     }
