@@ -29,15 +29,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.playerapp.data.models.Track
+import com.example.playerapp.presentation.navigation.Screen
 import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 import com.example.playerapp.presentation.viewmodel.TrackViewModel
 
 @Composable
 fun TrackScreen(
+    navController: NavController,
     trackViewModel: TrackViewModel = hiltViewModel(),
-    playerViewModel: PlayerViewModel = hiltViewModel()
+    playerViewModel: PlayerViewModel
 ) {
     val uiState by trackViewModel.uiState.collectAsState()
 
@@ -50,11 +53,15 @@ fun TrackScreen(
             Text(text = uiState.error ?: "Unknown Error", color = Color.Red)
         } else {
             TrackList(tracks = uiState.tracks, onItemClick = { track ->
-                track.preview?.let { playerViewModel.playTrack(it) }
+                track.preview?.let { previewUrl ->
+                    playerViewModel.playTrack(previewUrl, track)
+                    navController.navigate(Screen.PlaybackScreen.route)
+                }
             })
         }
     }
 }
+
 
 
 @Composable
@@ -88,9 +95,8 @@ fun TrackItem(track: Track, onItemClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onItemClick() }
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .clickable(onClick = onItemClick)
+            .padding(16.dp)
     ) {
         AsyncImage(
             model = track.album.cover,
@@ -104,3 +110,8 @@ fun TrackItem(track: Track, onItemClick: () -> Unit) {
         }
     }
 }
+
+
+
+
+

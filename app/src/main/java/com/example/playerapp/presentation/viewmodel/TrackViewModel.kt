@@ -22,7 +22,7 @@ class TrackViewModel @Inject constructor(
         fetchTopTracks()
     }
 
-    fun fetchTopTracks() {
+    private fun fetchTopTracks() {
         viewModelScope.launch {
             _uiState.value = TrackUiState(isLoading = true)
             trackRepository.fetchTopTracks().fold(

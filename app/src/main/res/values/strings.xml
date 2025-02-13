@@ -3,5 +3,6 @@
     <string name="track_screen_label">Tracks</string>
     <string name="downloaded_screen_label">Downloaded</string>
     <string name="playback_screen_label">Playback</string>
+    <string name="playback">playback\n</string>
 </resources>
 

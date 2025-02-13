@@ -1,5 +1,6 @@
 package com.example.playerapp.presentation.navigation
 
+import PlaybackScreen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -7,39 +8,42 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.playerapp.R
 import com.example.playerapp.presentation.screen.TrackScreen
+import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 
 sealed class Screen(val route: String, val label: Int) {
 
     data object TrackScreen : Screen("track_screen", R.string.track_screen_label)
     data object DownloadedTrackScreen : Screen("downloaded_track_screen",  R.string.downloaded_screen_label)
-    data object PlaybackScreen : Screen("playback_screen/{trackId}", R.string.playback_screen_label) {
-        fun createRoute(trackId: Int) = "playback_screen/$trackId"
-    }
+    data object PlaybackScreen : Screen("playback", R.string.playback)
+
 }
 
 @Composable
 fun MusicAppNavigation(
     startDestination: String,
-    navController: NavHostController, // Добавляем navController как параметр
-    padding: PaddingValues // Добавляем padding как параметр
-) {
+    navController: NavHostController,
+    padding: PaddingValues,
+    playerViewModel: PlayerViewModel,
+
+
+    ) {
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = Modifier.padding(padding) // Применяем padding к NavHost
+        modifier = Modifier.padding(padding)
     ) {
         composable(Screen.TrackScreen.route) {
-            TrackScreen()
+            TrackScreen(playerViewModel = playerViewModel, navController = navController)
         }
         composable(Screen.DownloadedTrackScreen.route) {
-            // DownloadedTrackScreen() // Здесь можно добавить экран скачанных треков
+            // DownloadedTrackScreen()
         }
-        composable(Screen.PlaybackScreen.route) { backStackEntry ->
-            val trackId = backStackEntry.arguments?.getString("trackId")?.toIntOrNull() ?: -1
-            // PlaybackScreen(trackId = trackId) // Здесь можно добавить экран воспроизведения
+        composable(Screen.PlaybackScreen.route) {
+            PlaybackScreen(navController, playerViewModel)
         }
+
     }
 }

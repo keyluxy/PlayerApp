@@ -3,8 +3,6 @@ package com.example.playerapp.presentation.navigation.custom_bottom_nav
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowColumnScopeInstance.weight
-import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -27,7 +25,6 @@ fun CustomBottomNavigationItem(
 ) {
     Box(
         modifier = Modifier
-//            .weight(1f)
             .clickable(onClick = onClick)
             .padding(8.dp),
         contentAlignment = Alignment.Center

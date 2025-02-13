@@ -1,3 +1,5 @@
+@file:Suppress("PLUGIN_IS_NOT_ENABLED")
+
 package com.example.playerapp.data.models
 
 import kotlinx.serialization.Serializable
@@ -8,7 +10,7 @@ data class Track(
     val title: String,
     val artist: Artist,
     val album: Album,
-    val preview: String?, // URL на превью трека
+    val preview: String?,
     val position: Int
 )
 
@@ -16,22 +18,18 @@ data class Track(
 data class Artist(
     val id: Long,
     val name: String,
-    val picture: String? // URL картинки исполнителя
+    val picture: String?
 )
 
 @Serializable
 data class Album(
     val id: Long,
     val title: String,
-    val cover: String? // URL картинки обложки альбома
+    val cover: String?
 )
 
 @Serializable
 data class TracksData(
-    val data: List<Track> // Список треков
+    val data: List<Track>
 )
 
-@Serializable
-data class ChartResponse(
-    val tracks: TracksData // Вложенный объект с треками
-)

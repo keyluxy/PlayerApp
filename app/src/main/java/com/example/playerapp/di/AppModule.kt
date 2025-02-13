@@ -1,5 +1,6 @@
 package com.example.playerapp.di
 
+import com.example.playerapp.data.repository.TrackRepository
 import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 import dagger.Module
 import dagger.Provides
@@ -13,7 +14,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePlayerViewModel(): PlayerViewModel {
-        return PlayerViewModel()
+    fun providePlayerViewModel(trackRepository: TrackRepository): PlayerViewModel {
+        return PlayerViewModel(trackRepository)
     }
 }
+
