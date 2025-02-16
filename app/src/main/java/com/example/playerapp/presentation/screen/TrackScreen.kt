@@ -96,12 +96,19 @@ fun SearchBar(onSearch: (String) -> Unit) {
         label = { Text("Search Tracks") },
         modifier = Modifier.fillMaxWidth(),
         trailingIcon = {
-            IconButton(onClick = { onSearch(query) }) {
+            IconButton(
+                onClick = {
+                    if (query.isNotBlank()) {
+                        onSearch(query)
+                    }
+                }
+            ) {
                 Icon(Icons.Default.Search, contentDescription = "Search")
             }
         }
     )
 }
+
 
 
 @Composable

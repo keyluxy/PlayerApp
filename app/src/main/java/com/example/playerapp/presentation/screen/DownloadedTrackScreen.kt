@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,21 +30,27 @@ fun DownloadedTrackScreen(
     downloadedTrackViewModel: DownloadedTrackViewModel = hiltViewModel()
 ) {
     val uiState by downloadedTrackViewModel.state.collectAsState(initial = DownloadedTrackState())
+    var query by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         downloadedTrackViewModel.sendIntent(DownloadedTrackIntent.RefreshDownloads)
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
+        SearchBar(onSearch = { searchQuery -> query = searchQuery })
+
         if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else if (uiState.error != null) {
             Text(text = uiState.error ?: "Unknown Error", color = Color.Red)
         } else {
+            val filteredTracks = uiState.tracks.map { it.toTrack() }
+                .filter { it.title.contains(query, ignoreCase = true) }
+
             TrackList(
-                tracks = uiState.tracks.map { it.toTrack() },
+                tracks = filteredTracks,
                 onItemClick = { track ->
-                    playerViewModel.setLocalTracks(uiState.tracks.map { it.toTrack() })
+                    playerViewModel.setLocalTracks(filteredTracks)
                     playerViewModel.playTrack(track)
                     navController.navigate(Screen.PlaybackScreen.route)
                 },
@@ -54,10 +63,10 @@ fun DownloadedTrackScreen(
                     }
                 }
             )
-
         }
     }
 }
+
 
 
 
