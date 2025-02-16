@@ -23,9 +23,9 @@ object AppModule {
     @Singleton
     fun providePlayerViewModel(
         trackRepository: TrackRepository,
-        @ApplicationContext context: Context // Добавляем контекст
+        @ApplicationContext context: Context
     ): PlayerViewModel {
-        return PlayerViewModel(trackRepository, context) // Передаем контекст
+        return PlayerViewModel(trackRepository, context)
     }
 
     @Provides

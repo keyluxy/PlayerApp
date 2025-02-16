@@ -54,7 +54,6 @@ fun TrackScreen(
     trackViewModel: TrackViewModel = hiltViewModel(),
     playerViewModel: PlayerViewModel
 ) {
-    // Explicitly specify the type for collectAsState
     val uiState by trackViewModel.state.collectAsState(initial = TrackState())
 
     LaunchedEffect(Unit) {
@@ -107,7 +106,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
 
 @Composable
 fun TrackList(
-    tracks: List<Track>, // Corrected type to List<Track>
+    tracks: List<Track>,
     onItemClick: (Track) -> Unit,
     onDownloadClick: ((Track) -> Unit)? = null,
     onDeleteClick: ((Track) -> Unit)? = null

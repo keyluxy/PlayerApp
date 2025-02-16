@@ -20,23 +20,19 @@ class DownloadedTrackViewModel @Inject constructor(
     private val playerViewModel: PlayerViewModel
 ) : ViewModel() {
 
-    // State flow for managing UI state
     private val _state = MutableStateFlow(DownloadedTrackState())
     val state: StateFlow<DownloadedTrackState> = _state
 
-    // Channel for handling intents
     private val intentChannel = Channel<DownloadedTrackIntent>(Channel.UNLIMITED)
 
     init {
         handleIntents()
     }
 
-    // Function to send intents to the ViewModel
     fun sendIntent(intent: DownloadedTrackIntent) {
         viewModelScope.launch { intentChannel.send(intent) }
     }
 
-    // Function to handle intents
     private fun handleIntents() {
         viewModelScope.launch {
             for (intent in intentChannel) {
@@ -57,19 +53,12 @@ class DownloadedTrackViewModel @Inject constructor(
     }
 
 
-    // Function to refresh downloaded tracks
     private fun refreshDownloads() {
         viewModelScope.launch {
             trackRepository.getAllDownloadedTracks().collect { tracks ->
-                _state.value = DownloadedTrackState(tracks = tracks) // Убираем преобразование
+                _state.value = DownloadedTrackState(tracks = tracks)
             }
         }
     }
 
-
-
-    // Function to update the state (if needed)
-    private fun updateState(newState: DownloadedTrackState) {
-        _state.value = newState
-    }
 }

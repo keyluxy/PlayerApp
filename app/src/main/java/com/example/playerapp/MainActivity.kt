@@ -35,11 +35,11 @@ class MainActivity : ComponentActivity() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "music_channel", // ID канала
-                "Music Player", // Название канала
-                NotificationManager.IMPORTANCE_LOW // Важность
+                "music_channel",
+                "Music Player",
+                NotificationManager.IMPORTANCE_LOW
             ).apply {
-                setSound(null, null) // Отключаем звук уведомлений
+                setSound(null, null)
             }
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

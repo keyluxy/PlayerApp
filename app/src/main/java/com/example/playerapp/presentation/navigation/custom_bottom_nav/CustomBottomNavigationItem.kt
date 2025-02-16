@@ -31,24 +31,22 @@ fun CustomBottomNavigationItem(
     Box(
         modifier = Modifier
             .clickable(onClick = onClick)
-            .padding(2.dp) // Увеличиваем отступ
-            .height(140.dp), // Увеличиваем высоту панели
+            .padding(2.dp)
+            .height(140.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center // Центрируем элементы по вертикали
+            verticalArrangement = Arrangement.Center
         ) {
             if (screen == Screen.DownloadedTrackScreen) {
-                // Используем painterResource для изображения
                 Icon(
                     painter = painterResource(id = R.drawable.ic_download),
                     contentDescription = null,
                     tint = if (isSelected) Color.Blue else Color.Gray,
-                    modifier = Modifier.size(28.dp) // Увеличиваем иконку
+                    modifier = Modifier.size(28.dp)
                 )
             } else {
-                // Используем ImageVector для других экранов
                 Icon(
                     imageVector = when (screen) {
                         Screen.TrackScreen -> Icons.Default.Home
@@ -57,14 +55,14 @@ fun CustomBottomNavigationItem(
                     },
                     contentDescription = null,
                     tint = if (isSelected) Color.Blue else Color.Gray,
-                    modifier = Modifier.size(28.dp) // Увеличиваем иконку
+                    modifier = Modifier.size(28.dp)
                 )
             }
             Text(
                 text = stringResource(id = screen.label),
                 color = if (isSelected) Color.Blue else Color.Gray,
-                fontSize = 12.sp, // Увеличиваем шрифт
-                modifier = Modifier.padding(top = 4.dp) // Отступ между иконкой и текстом
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 4.dp)
             )
         }
     }

@@ -5,7 +5,7 @@ import com.example.playerapp.data.models.Track
 
 data class DownloadedTrackState(
     val isLoading: Boolean = false,
-    val tracks: List<DownloadedTrackEntity> = emptyList(), // Должно быть DownloadedTrackEntity
+    val tracks: List<DownloadedTrackEntity> = emptyList(),
     val error: String? = null
 )
 

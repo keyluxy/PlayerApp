@@ -26,9 +26,8 @@ fun CustomBottomNavigation(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center // Центрируем элементы
+            horizontalArrangement = Arrangement.Center
         ) {
-            // Первая кнопка
             CustomBottomNavigationItem(
                 screen = screens[0],
                 isSelected = currentRoute == screens[0].route,

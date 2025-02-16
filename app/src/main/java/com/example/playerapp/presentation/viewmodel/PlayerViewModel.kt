@@ -29,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
     private val trackRepository: TrackRepository,
-    @ApplicationContext private val context: Context // Добавляем контекст
+    @ApplicationContext private val context: Context
 
 ) : ViewModel() {
 

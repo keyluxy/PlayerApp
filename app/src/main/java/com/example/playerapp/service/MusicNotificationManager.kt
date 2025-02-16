@@ -1,6 +1,5 @@
 package com.example.playerapp.service
 
-import android.Manifest
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
@@ -22,31 +21,14 @@ class MusicNotificationManager(
     private val mediaSession: MediaSessionCompat
 ) {
 
-    private val notificationManager = NotificationManagerCompat.from(context)
 
-    // Метод может оставаться suspend, так как мы используем Coil для загрузки изображения
-    suspend fun showNotification(track: Track, isPlaying: Boolean) {
-        val notification = createNotification(track, isPlaying)
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        notificationManager.notify(1, notification)
-    }
-
-    // Здесь track уже не nullable
     suspend fun createNotification(track: Track, isPlaying: Boolean): Notification {
-        // Кнопка play/pause
         val playPauseAction = NotificationCompat.Action(
             if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play,
             if (isPlaying) "Pause" else "Play",
             getPendingIntent(MusicServiceActions.ACTION_PLAY_PAUSE)
         )
 
-        // Загрузка обложки через Coil (уменьшаем размер до 128x128 для компактности)
         var largeIcon: Bitmap? = null
         track.album.cover?.let { coverUrl ->
             runCatching {
@@ -62,7 +44,6 @@ class MusicNotificationManager(
             }
         }
 
-        // Создаем уведомление с MediaStyle и тремя кнопками управления
         return NotificationCompat.Builder(context, "music_channel")
             .setSmallIcon(R.drawable.ic_default)
             .setContentTitle(track.title)

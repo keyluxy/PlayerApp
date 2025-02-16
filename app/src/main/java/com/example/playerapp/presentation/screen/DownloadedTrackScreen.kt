@@ -39,7 +39,7 @@ fun DownloadedTrackScreen(
             Text(text = uiState.error ?: "Unknown Error", color = Color.Red)
         } else {
             TrackList(
-                tracks = uiState.tracks.map { it.toTrack() }, // Преобразуем DownloadedTrackEntity в Track
+                tracks = uiState.tracks.map { it.toTrack() },
                 onItemClick = { track ->
                     playerViewModel.setLocalTracks(uiState.tracks.map { it.toTrack() })
                     playerViewModel.playTrack(track)
