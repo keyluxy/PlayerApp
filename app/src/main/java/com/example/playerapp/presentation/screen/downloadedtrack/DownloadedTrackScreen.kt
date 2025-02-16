@@ -59,7 +59,6 @@ fun DownloadedTrackScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         TrackList(
             tracks = tracks,
-            // DownloadedTrackScreen.kotlin
             onItemClick = { track ->
                 playerViewModel.setLocalTracks(tracks)
                 playerViewModel.playTrack(track.copy(localFilePath = track.localFilePath))

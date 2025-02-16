@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Разрешения должны быть объявлены здесь, вне тега application -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".MyApplication"
@@ -14,6 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlayerApp"
         tools:targetApi="31">
+
+        <!-- Активности и сервисы объявляются внутри тега application -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -21,10 +27,17 @@
             android:theme="@style/Theme.PlayerApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Сервис добавлен внутрь тега application -->
+        <service
+            android:name=".services.MusicService"
+            android:enabled="true"
+            android:exported="false"
+            tools:ignore="WrongManifestParent" />
+
     </application>
 
 </manifest>

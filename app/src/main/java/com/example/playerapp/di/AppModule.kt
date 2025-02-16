@@ -11,6 +11,7 @@ import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -20,8 +21,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePlayerViewModel(trackRepository: TrackRepository): PlayerViewModel {
-        return PlayerViewModel(trackRepository)
+    fun providePlayerViewModel(
+        trackRepository: TrackRepository,
+        @ApplicationContext context: Context // Добавляем контекст
+    ): PlayerViewModel {
+        return PlayerViewModel(trackRepository, context) // Передаем контекст
     }
 
     @Provides
@@ -47,4 +51,3 @@ object AppModule {
         return application.applicationContext
     }
 }
-

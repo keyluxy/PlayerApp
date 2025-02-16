@@ -2,6 +2,8 @@ package com.example.playerapp.presentation.viewmodel
 
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,7 +13,9 @@ import com.example.playerapp.data.models.Album
 import com.example.playerapp.data.models.Artist
 import com.example.playerapp.data.models.Track
 import com.example.playerapp.data.repository.TrackRepository
+import com.example.playerapp.service.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +28,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
-    private val trackRepository: TrackRepository
+    private val trackRepository: TrackRepository,
+    @ApplicationContext private val context: Context // Добавляем контекст
+
 ) : ViewModel() {
 
     private var mediaPlayer: MediaPlayer? = null
@@ -47,6 +53,18 @@ class PlayerViewModel @Inject constructor(
         observeDownloadedTracks()
     }
 
+    fun startService() {
+        val intent = Intent(context, MusicService::class.java)
+        context.startService(intent)
+    }
+
+    fun sendCommand(action: String) {
+        Intent(context, MusicService::class.java).apply {
+            this.action = action
+            context.startService(this)
+        }
+    }
+
 
     private fun observeDownloadedTracks() {
         viewModelScope.launch {
@@ -60,7 +78,6 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    // Преобразование DownloadedTrackEntity в Track
     private fun DownloadedTrackEntity.toTrack(): Track {
         return Track(
             id = this.id.toLong(),
