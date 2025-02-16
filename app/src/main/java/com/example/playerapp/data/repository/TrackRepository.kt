@@ -6,8 +6,6 @@ import com.example.playerapp.data.database.DownloadedTrackDao
 import com.example.playerapp.data.database.DownloadedTrackEntity
 import com.example.playerapp.data.models.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -46,20 +44,22 @@ class TrackRepository @Inject constructor(
         }
     }
 
-
-    suspend fun getAllDownloadedTracks(): Flow<List<DownloadedTrackEntity>> {
+    fun getAllDownloadedTracks(): Flow<List<DownloadedTrackEntity>> {
         return downloadedTrackDao.getAllDownloadedTracks()
     }
 
     suspend fun deleteDownloadedTrack(track: DownloadedTrackEntity) {
-        File(track.localFilePath).delete() // Удаление файла
-        downloadedTrackDao.delete(track)
+        val file = File(track.localFilePath)
+        if (file.exists() && file.delete()) {
+            downloadedTrackDao.delete(track)
+        } else {
+            throw Exception("Failed to delete file at ${track.localFilePath}")
+        }
     }
 
-
-    suspend fun downloadTrack(track: Track): Boolean {
+    suspend fun downloadTrack(track: Track): Result<Boolean> {
         return try {
-            val fileUrl = track.preview ?: return false
+            val fileUrl = track.preview ?: return Result.failure(Exception("Track preview URL is null"))
             val file = downloadFile(fileUrl)
 
             val downloadedTrack = DownloadedTrackEntity(
@@ -71,10 +71,9 @@ class TrackRepository @Inject constructor(
                 coverUrl = track.album.cover ?: ""
             )
             downloadedTrackDao.insert(downloadedTrack)
-            true
+            Result.success(true)
         } catch (e: Exception) {
-            e.printStackTrace()
-            false
+            Result.failure(e)
         }
     }
 
@@ -84,7 +83,12 @@ class TrackRepository @Inject constructor(
             throw Exception("Ошибка скачивания: ${response.message()}")
         }
 
-        val file = File(context.filesDir, "track_${System.currentTimeMillis()}.mp3")
+        val filesDir = context.filesDir
+        if (!filesDir.exists()) {
+            filesDir.mkdirs() // Ensure the directory exists
+        }
+
+        val file = File(filesDir, "track_${System.currentTimeMillis()}.mp3")
         response.body()?.byteStream()?.use { inputStream ->
             file.outputStream().use { outputStream ->
                 inputStream.copyTo(outputStream)

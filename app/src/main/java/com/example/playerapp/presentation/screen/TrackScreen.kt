@@ -44,6 +44,8 @@ import com.example.playerapp.data.models.Track
 import com.example.playerapp.presentation.navigation.Screen
 import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 import com.example.playerapp.presentation.viewmodel.TrackViewModel
+import com.example.playerapp.presentation.viewmodel.intent.TrackIntent
+import com.example.playerapp.presentation.viewmodel.state.TrackState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -52,16 +54,17 @@ fun TrackScreen(
     trackViewModel: TrackViewModel = hiltViewModel(),
     playerViewModel: PlayerViewModel
 ) {
+    // Explicitly specify the type for collectAsState
+    val uiState by trackViewModel.state.collectAsState(initial = TrackState())
+
     LaunchedEffect(Unit) {
-        trackViewModel.downloadCompleted.collect {
-            playerViewModel.setLocalTracks(trackViewModel.uiState.value.tracks)
-        }
+        trackViewModel.sendIntent(TrackIntent.FetchTopTracks)
     }
 
-    val uiState by trackViewModel.uiState.collectAsState()
-
     Column(modifier = Modifier.fillMaxSize()) {
-        SearchBar(onSearch = { query -> trackViewModel.searchTracks(query) })
+        SearchBar(onSearch = { query ->
+            trackViewModel.sendIntent(TrackIntent.SearchTracks(query))
+        })
 
         if (uiState.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -76,7 +79,7 @@ fun TrackScreen(
                     navController.navigate(Screen.PlaybackScreen.route)
                 },
                 onDownloadClick = { track ->
-                    trackViewModel.downloadTrack(track)
+                    trackViewModel.sendIntent(TrackIntent.DownloadTrack(track))
                 }
             )
         }
@@ -104,7 +107,7 @@ fun SearchBar(onSearch: (String) -> Unit) {
 
 @Composable
 fun TrackList(
-    tracks: List<Track>,
+    tracks: List<Track>, // Corrected type to List<Track>
     onItemClick: (Track) -> Unit,
     onDownloadClick: ((Track) -> Unit)? = null,
     onDeleteClick: ((Track) -> Unit)? = null

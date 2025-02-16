@@ -10,9 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.playerapp.R
 import com.example.playerapp.presentation.screen.TrackScreen
-import com.example.playerapp.presentation.screen.downloadedtrack.DownloadedTrackScreen
+import com.example.playerapp.presentation.screen.DownloadedTrackScreen
 import com.example.playerapp.presentation.screen.player.PlaybackScreen
-import com.example.playerapp.presentation.viewmodel.DownloadedTrackViewModel
 import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 
 sealed class Screen(val route: String, val label: Int) {
@@ -45,7 +44,6 @@ fun MusicAppNavigation(
             DownloadedTrackScreen(
                 navController = navController,
                 playerViewModel = playerViewModel,
-                trackViewModel = hiltViewModel(),
                 downloadedTrackViewModel = hiltViewModel()
             )
         }

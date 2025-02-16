@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playerapp.data.models.Track
 import com.example.playerapp.data.repository.TrackRepository
+import com.example.playerapp.presentation.viewmodel.intent.TrackIntent
+import com.example.playerapp.presentation.viewmodel.state.TrackState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,54 +20,76 @@ class TrackViewModel @Inject constructor(
     private val trackRepository: TrackRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(TrackUiState())
-    val uiState: StateFlow<TrackUiState> = _uiState
-    private val _downloadCompleted = MutableSharedFlow<Unit>()
-    val downloadCompleted: SharedFlow<Unit> = _downloadCompleted
+    private val _state = MutableStateFlow(TrackState())
+    val state: StateFlow<TrackState> = _state
+
+    private val intentChannel = Channel<TrackIntent>(Channel.UNLIMITED)
 
     init {
-        fetchTopTracks()
+        handleIntents()
     }
 
-    private fun fetchTopTracks() {
+    fun sendIntent(intent: TrackIntent) {
+        viewModelScope.launch { intentChannel.send(intent) }
+    }
+
+    private fun handleIntents() {
         viewModelScope.launch {
-            _uiState.value = TrackUiState(isLoading = true)
-            trackRepository.fetchTopTracks().fold(
-                onSuccess = { tracks ->
-                    _uiState.value = TrackUiState(tracks = tracks)
-                },
-                onFailure = { error ->
-                    _uiState.value = TrackUiState(error = error.message)
+            for (intent in intentChannel) {
+                when (intent) {
+                    is TrackIntent.SearchTracks -> searchTracks(intent.query)
+                    TrackIntent.FetchTopTracks -> fetchTopTracks()
+                    is TrackIntent.DownloadTrack -> downloadTrack(intent.track)
                 }
-            )
-        }
-    }
-
-    fun searchTracks(query: String) {
-        viewModelScope.launch {
-            _uiState.value = TrackUiState(isLoading = true)
-            trackRepository.searchTracks(query).fold(
-                onSuccess = { tracks ->
-                    _uiState.value = TrackUiState(tracks = tracks)
-                },
-                onFailure = { error ->
-                    _uiState.value = TrackUiState(error = error.message)
-                }
-            )
-        }
-    }
-
-    fun downloadTrack(track: Track) {
-        viewModelScope.launch {
-            if (trackRepository.downloadTrack(track)) {
-                _downloadCompleted.emit(Unit)
             }
         }
     }
-}
 
-data class TrackUiState(
-    val tracks: List<Track> = emptyList(),
-    val isLoading: Boolean = false,
-    val error: String? = null
-)
+    private fun fetchTopTracks() {
+        updateState(TrackState(isLoading = true))
+        viewModelScope.launch {
+            trackRepository.fetchTopTracks().fold(
+                onSuccess = { tracks ->
+                    updateState(TrackState(tracks = tracks))
+                },
+                onFailure = { error ->
+                    updateState(TrackState(error = error.message))
+                }
+            )
+        }
+    }
+
+    private fun searchTracks(query: String) {
+        updateState(TrackState(isLoading = true))
+        viewModelScope.launch {
+            trackRepository.searchTracks(query).fold(
+                onSuccess = { tracks ->
+                    updateState(TrackState(tracks = tracks))
+                },
+                onFailure = { error ->
+                    updateState(TrackState(error = error.message))
+                }
+            )
+        }
+    }
+
+    private fun downloadTrack(track: Track) {
+        viewModelScope.launch {
+            trackRepository.downloadTrack(track).fold(
+                onSuccess = { success ->
+                    if (success) {
+                        fetchTopTracks()
+                    }
+                },
+                onFailure = { error ->
+                    updateState(TrackState(error = error.message))
+                }
+            )
+        }
+    }
+
+
+    private fun updateState(newState: TrackState) {
+        _state.value = newState
+    }
+}
