@@ -1,6 +1,5 @@
 package com.example.playerapp.presentation.screen
 
-import CustomBottomNavigation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Scaffold
@@ -15,7 +14,7 @@ import com.example.playerapp.presentation.navigation.Screen
 import com.example.playerapp.presentation.screen.player.MiniPlayer
 import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.playerapp.presentation.viewmodel.DownloadedTrackViewModel
+import com.example.playerapp.presentation.navigation.custom_bottom_nav.CustomBottomNavigation
 
 @Composable
 fun MainScreen(playerViewModel: PlayerViewModel) {
@@ -23,7 +22,6 @@ fun MainScreen(playerViewModel: PlayerViewModel) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val currentTrack by playerViewModel.currentTrack.collectAsState()
-    val downloadedTrackViewModel: DownloadedTrackViewModel = hiltViewModel()
 
     Scaffold(
         bottomBar = {
@@ -38,10 +36,7 @@ fun MainScreen(playerViewModel: PlayerViewModel) {
                 CustomBottomNavigation(
                     navController = navController,
                     currentRoute = currentRoute,
-                    screens = listOf(
-                        Screen.TrackScreen,
-                        Screen.DownloadedTrackScreen
-                    )
+                    screens = listOf(Screen.TrackScreen, Screen.DownloadedTrackScreen)
                 )
             }
         }
@@ -51,7 +46,6 @@ fun MainScreen(playerViewModel: PlayerViewModel) {
             navController = navController,
             padding = padding,
             playerViewModel = playerViewModel,
-            downloadedTrackViewModel = downloadedTrackViewModel
         )
     }
 }

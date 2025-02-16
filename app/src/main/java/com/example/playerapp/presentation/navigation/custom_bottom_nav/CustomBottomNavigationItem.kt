@@ -29,40 +29,21 @@ fun CustomBottomNavigationItem(
             .padding(8.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (isSelected) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = when (screen) {
-                        Screen.TrackScreen -> Icons.Default.Home
-                        Screen.DownloadedTrackScreen -> Icons.Default.Home
-                        Screen.PlaybackScreen -> Icons.Default.Home
-                    },
-                    contentDescription = null,
-                    tint = Color.Blue
-                )
-                Text(
-                    text = stringResource(id = screen.label),
-                    color = Color.Blue,
-                    fontSize = 10.sp
-                )
-            }
-        } else {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = when (screen) {
-                        Screen.TrackScreen -> Icons.Default.Home
-                        Screen.DownloadedTrackScreen -> Icons.Default.Home
-                        Screen.PlaybackScreen -> Icons.Default.Home
-                    },
-                    contentDescription = null,
-                    tint = Color.Gray
-                )
-                Text(
-                    text = stringResource(id = screen.label),
-                    color = Color.Gray,
-                    fontSize = 10.sp
-                )
-            }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                imageVector = when (screen) {
+                    Screen.TrackScreen -> Icons.Default.Home
+                    Screen.DownloadedTrackScreen -> Icons.Default.Home
+                    Screen.PlaybackScreen -> Icons.Default.Home
+                },
+                contentDescription = null,
+                tint = if (isSelected) Color.Blue else Color.Gray
+            )
+            Text(
+                text = stringResource(id = screen.label),
+                color = if (isSelected) Color.Blue else Color.Gray,
+                fontSize = 10.sp
+            )
         }
     }
 }

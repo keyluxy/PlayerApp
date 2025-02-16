@@ -29,7 +29,6 @@ fun MusicAppNavigation(
     navController: NavHostController,
     padding: PaddingValues,
     playerViewModel: PlayerViewModel,
-    downloadedTrackViewModel: DownloadedTrackViewModel
 ) {
     NavHost(
         navController = navController,
