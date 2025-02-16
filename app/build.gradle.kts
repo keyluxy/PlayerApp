@@ -89,6 +89,9 @@ dependencies {
     // koil
     implementation(libs.coil.compose)
 
+    implementation (libs.androidx.room.ktx)
+
+
 
 
     implementation(libs.hilt.android)

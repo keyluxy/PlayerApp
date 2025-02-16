@@ -58,7 +58,7 @@ fun PlaybackScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .offset(y = offsetY.dp) // Используем dp
+            .offset(y = offsetY.dp)
     ) {
         Column(
             modifier = Modifier

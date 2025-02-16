@@ -1,5 +1,7 @@
 package com.example.playerapp.data.api
 
+import android.content.Context
+import com.example.playerapp.data.database.DownloadedTrackDao
 import com.example.playerapp.data.repository.TrackRepository
 import dagger.Module
 import dagger.Provides
@@ -40,7 +42,11 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideTrackRepository(apiService: DeezerApiService): TrackRepository {
-        return TrackRepository(apiService)
+    fun provideTrackRepository(
+        apiService: DeezerApiService,
+        downloadedTrackDao: DownloadedTrackDao,
+        context: Context
+    ): TrackRepository {
+        return TrackRepository(apiService, downloadedTrackDao, context)
     }
 }

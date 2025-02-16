@@ -26,7 +26,7 @@ fun MiniPlayer(
     val currentTrack by playerViewModel.currentTrack.collectAsState()
     val isPlaying by playerViewModel.isPlaying.collectAsState()
 
-    if (currentTrack != null && isPlaying) {
+    if (currentTrack != null) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -74,6 +74,7 @@ fun MiniPlayer(
         }
     }
 }
+
 
 
 

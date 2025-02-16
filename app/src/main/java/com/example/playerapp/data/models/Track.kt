@@ -11,7 +11,8 @@ data class Track(
     val artist: Artist,
     val album: Album,
     val preview: String?,
-    val position: Int
+    val position: Int,
+    val localFilePath: String? = null
 )
 
 @Serializable
@@ -28,8 +29,5 @@ data class Album(
     val cover: String?
 )
 
-@Serializable
-data class TracksData(
-    val data: List<Track>
-)
+
 

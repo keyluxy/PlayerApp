@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.playerapp.data.models.Track
 import com.example.playerapp.data.repository.TrackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,6 +19,8 @@ class TrackViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(TrackUiState())
     val uiState: StateFlow<TrackUiState> = _uiState
+    private val _downloadCompleted = MutableSharedFlow<Unit>()
+    val downloadCompleted: SharedFlow<Unit> = _downloadCompleted
 
     init {
         fetchTopTracks()
@@ -47,6 +51,14 @@ class TrackViewModel @Inject constructor(
                     _uiState.value = TrackUiState(error = error.message)
                 }
             )
+        }
+    }
+
+    fun downloadTrack(track: Track) {
+        viewModelScope.launch {
+            if (trackRepository.downloadTrack(track)) {
+                _downloadCompleted.emit(Unit)
+            }
         }
     }
 }
