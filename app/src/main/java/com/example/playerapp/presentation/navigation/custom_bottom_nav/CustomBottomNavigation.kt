@@ -43,10 +43,8 @@ fun CustomBottomNavigation(
                 }
             )
 
-            // Добавляем расстояние между кнопками
-            Spacer(modifier = Modifier.width(32.dp)) // Расстояние между кнопками
+            Spacer(modifier = Modifier.width(32.dp))
 
-            // Вторая кнопка
             CustomBottomNavigationItem(
                 screen = screens[1],
                 isSelected = currentRoute == screens[1].route,
