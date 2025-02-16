@@ -9,7 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.media3.common.util.NotificationUtil.createNotificationChannel
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.playerapp.presentation.screen.MainScreen
 import com.example.playerapp.presentation.viewmodel.PlayerViewModel
 import com.example.playerapp.ui.theme.PlayerAppTheme
@@ -47,4 +47,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
