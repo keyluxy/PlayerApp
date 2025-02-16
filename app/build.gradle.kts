@@ -4,7 +4,10 @@ plugins {
 
     id("kotlin-kapt")
     alias(libs.plugins.hilt)
+
 }
+
+
 
 android {
     namespace = "com.example.playerapp"
@@ -66,6 +69,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.service)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,6 +77,24 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.material3)
+
+    // serialization
+    implementation (libs.gson)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    // koil
+    implementation(libs.coil.compose)
+
+    implementation (libs.androidx.room.ktx)
+
+    implementation(libs.androidx.media)
+
+
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
